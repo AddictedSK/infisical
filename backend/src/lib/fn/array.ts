@@ -75,11 +75,34 @@ export const objectify = <T, Key extends string | number | symbol, Value = T>(
  * Chunks an array into smaller arrays of the given size.
  */
 export const chunkArray = <T>(array: readonly T[], chunkSize: number): T[][] => {
+  if (!array || array.length === 0) return [];
+  if (chunkSize <= 0) return [array.slice()];
+
   const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
+  for (let i = 0; i <= array.length; i += chunkSize) {
     chunks.push(array.slice(i, i + chunkSize));
   }
   return chunks;
+};
+
+/**
+ * Splits an array into two groups: the first containing elements that satisfy
+ * the predicate, and the second containing elements that do not.
+ */
+export const partition = <T>(
+  array: readonly T[],
+  predicate: (item: T) => boolean
+): [T[], T[]] => {
+  const matched: T[] = [];
+  const unmatched: T[] = [];
+  for (const item of array) {
+    if (predicate(item)) {
+      matched.push(item);
+    } else {
+      unmatched.push(item);
+    }
+  }
+  return [matched, unmatched];
 };
 
 /*
