@@ -33,6 +33,7 @@ export const isSafeRedirectUrl = (url: string): boolean => {
   if (!url || typeof url !== "string") return false;
 
   // Allow relative paths starting with /
+  if (/[\u0000-\u001f\u007f]/.test(url)) return false;
   if (url.startsWith("/") && !url.startsWith("//") && !url.startsWith("/\\")) {
     return true;
   }
