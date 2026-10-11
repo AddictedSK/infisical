@@ -14,6 +14,48 @@ export const pick = <T extends object, TKeys extends keyof T>(obj: T, keys: TKey
 };
 
 /**
+ * Omit a list of properties from an object
+ * into a new object
+ */
+export const omit = <T extends object, TKeys extends keyof T>(
+  obj: T,
+  keys: TKeys[]
+): Omit<T, TKeys> => {
+  if (!obj) return {} as Omit<T, TKeys>;
+  const keySet = new Set<keyof T>(keys);
+  const result = {} as Omit<T, TKeys>;
+  for (const key of Object.keys(obj) as (keyof T)[]) {
+    if (!keySet.has(key)) {
+      (result as Record<keyof T, unknown>)[key] = obj[key];
+    }
+  }
+  return result;
+};
+
+/**
+ * Creates a deep copy of a given value supporting primitives, plain objects, and arrays.
+ */
+export const deepClone = <T>(value: T): T => {
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+
+  if (value instanceof Date) {
+    return new Date(value.getTime()) as unknown as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => deepClone(item)) as unknown as T;
+  }
+
+  const result: Record<string, unknown> = {};
+  for (const [key, val] of Object.entries(value)) {
+    result[key] = deepClone(val);
+  }
+  return result as T;
+};
+
+/**
  * Removes (shakes out) undefined entries from an
  * object. Optional second argument shakes out values
  * by custom evaluation.
