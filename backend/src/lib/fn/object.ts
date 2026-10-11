@@ -50,7 +50,7 @@ export const deepClone = <T>(value: T): T => {
 
   const result: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(value)) {
-    result[key] = deepClone(val);
+    Object.defineProperty(result, key, { value: deepClone(val), enumerable: true, writable: true, configurable: true });
   }
   return result as T;
 };
