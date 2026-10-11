@@ -22,3 +22,25 @@ export const verifyOfflineLicense = async (licenseContents: string, signature: s
 
   return verifySignature(licenseContents, Buffer.from(signature, "base64"), publicKey);
 };
+
+/**
+ * Verifies that a given HMAC-SHA256 signature matches the payload and secret.
+ */
+export const verifyHmacSha256Signature = (
+  payload: string | Buffer,
+  signature: string,
+  secret: string
+): boolean => {
+  if (!payload || !signature || !secret) {
+    return false;
+  }
+
+  const expectedSignature = crypto.nativeCrypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest();
+
+  const providedSignature = Buffer.from(signature, "hex");
+
+  return crypto.nativeCrypto.timingSafeEqual(expectedSignature, providedSignature);
+};
