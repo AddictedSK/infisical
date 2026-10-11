@@ -79,7 +79,7 @@ export const chunkArray = <T>(array: readonly T[], chunkSize: number): T[][] => 
   if (chunkSize <= 0) return [array.slice()];
 
   const chunks: T[][] = [];
-  for (let i = 0; i <= array.length; i += chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
     chunks.push(array.slice(i, i + chunkSize));
   }
   return chunks;
