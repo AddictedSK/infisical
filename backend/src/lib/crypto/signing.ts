@@ -42,5 +42,9 @@ export const verifyHmacSha256Signature = (
 
   const providedSignature = Buffer.from(signature, "hex");
 
+  if (providedSignature.length !== expectedSignature.length) {
+    return false;
+  }
+
   return crypto.nativeCrypto.timingSafeEqual(expectedSignature, providedSignature);
 };
